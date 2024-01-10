@@ -21,6 +21,10 @@ Clone the repository to your local machine.
 
 git clone [repository-link]
 Navigate to the cloned directory.
+
+Placing the OpenAI Key
+To use WhatsThis?, you need to place your OpenAI API key in the project folder for easy access. Simply create a text file named api_key.txt in the same directory as the WhatsThis? script. Paste your OpenAI API key into this file. The script is configured to automatically read the key from here, ensuring a smooth and secure operation of the application. This method keeps your key conveniently accessible while maintaining the simplicity of the setup process.
+
 Usage
 WhatsThis? is designed for ease of use:
 
