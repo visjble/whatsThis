@@ -2,7 +2,7 @@
 2024 VISJBLE
 python3: Specifies the desired Python interpreter (replace with the appropriate version if needed)
 '''
-#! /usr/bin/env python3
+
 import os
 import subprocess
 import tkinter as tk
@@ -27,7 +27,8 @@ def encode_image(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
 
-def upload_image_and_get_description(base64_image, additional_text="What’s in this image?"):
+def upload_image_and_get_description(base64_image, additional_text="What’s in this image? No more than 20 words"):
+    # EDIT additiona_text if needed
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {api_key}"
@@ -52,7 +53,7 @@ def upload_image_and_get_description(base64_image, additional_text="What’s in 
                 ]
             }
         ],
-        "max_tokens": 10  # Customize here
+        "max_tokens": 200  # Customize here
     }
 
     try:
@@ -70,8 +71,9 @@ def update_text(content):
     if text_area:
         text_area.configure(state='normal')
         text_area.delete('1.0', tk.END)
-        text_area.insert(tk.INSERT, content)
-        text_area.configure(state='disabled')
+        text_area.insert(tk.END, f"{content}\n")
+        text_area.insert(tk.END, f"{'-' * 67}\n", "center")
+
 
 def quit_application():
     global root
@@ -88,11 +90,18 @@ def handle_question():
         text_area.insert(tk.END, f"\nMe: {new_question}\n")
         text_area.configure(state='disabled')
 
+        # Scroll to the end
+        text_area.yview_moveto(1.0)
+
         # Get and display the response
         response = upload_image_and_get_description(base64_image, new_question)
         text_area.configure(state='normal')
-        text_area.insert(tk.END, f"AI: {response}\n")
+        text_area.insert(tk.END, f"\nAI: {response}\n")
+        text_area.insert(tk.END, '-' * 67 + '\n', 'center')
         text_area.configure(state='disabled')
+
+        # Scroll to the end
+        text_area.yview_moveto(1.0)
         
         # Clear the input field after submitting the question
         question_input.delete(0, tk.END)
@@ -100,28 +109,30 @@ def handle_question():
 
 def initialize_gui(description):
     global root, text_area, question_input
-    
+
     # Setting up the widgets
     root = tk.Tk()
     root.title("WhatsThis")
 
     text_area = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=50, height=10)
-    text_area.pack(padx=5, pady=5)
+    text_area.grid(row=0, column=0, columnspan=2, padx=5, pady=5, sticky="nsew")
     text_area.configure(state='disabled')
     update_text(description)
 
     question_input = tk.Entry(root, width=50)
-    question_input.pack(padx=5, pady=5)
+    question_input.grid(row=1, column=0, padx=5, pady=5, sticky="ew")
     question_input.bind('<Return>', lambda event: handle_question())  # Binding the Enter key
 
     quit_button = tk.Button(root, text="Quit", command=quit_application)
-    quit_button.pack(side=tk.RIGHT,padx=5, pady=5)
+    quit_button.grid(row=2, column=1, padx=5, pady=5, sticky="e")
 
     submit_button = tk.Button(root, text="Submit Question", command=handle_question)
-    submit_button.pack(side=tk.RIGHT, padx=5, pady=5)
+    submit_button.grid(row=2, column=0, padx=5, pady=5, sticky="e")  # Centered horizontally
 
-    # This updates the layout
-    root.update_idletasks()
+    # Configure grid to stretch properly
+    root.grid_rowconfigure(0, weight=1)
+    root.grid_columnconfigure(0, weight=1)
+    root.grid_columnconfigure(1, weight=1)  # Make column 1 stretch too
 
     # Get screen width and height
     screen_width = root.winfo_screenwidth()
@@ -133,16 +144,17 @@ def initialize_gui(description):
 
     # Calculate x and y coordinates
     x = screen_width - window_width
-    y = screen_height - window_height
+    y = screen_height - window_height + 600
 
     # Position the window at the bottom right of the screen
     root.geometry(f'{window_width}x{window_height}+{x}+{y}')
 
     root.mainloop()
 
+
 def main():
     global api_key, base64_image
-    with open("/path/to/api_key.txt", "r") as file:  # EDIT THE PATH TO YOUR NEEDS
+    with open("/path/to/api_key.txt", "r") as file: #EDIT HERE
         api_key = file.read().strip()
 
     screenshot_file = take_screenshot()
