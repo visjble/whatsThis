@@ -65,7 +65,7 @@ def main():
 
     additional_text = input("Enter your question (or press Enter for default): ").strip()
     if not additional_text:
-        additional_text = "What’s in this image in cyber security? Be somewhat brief"
+        additional_text = "What’s in this image? Be somewhat brief"
 
     description = upload_image_and_get_description(base64_image, additional_text)
     print("\nAI Response:\n" + description)
