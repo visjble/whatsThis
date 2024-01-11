@@ -144,7 +144,7 @@ def initialize_gui(description):
 
     # Calculate x and y coordinates
     x = screen_width - window_width
-    y = screen_height - window_height + 600
+    y = screen_height - window_height
 
     # Position the window at the bottom right of the screen
     root.geometry(f'{window_width}x{window_height}+{x}+{y}')
