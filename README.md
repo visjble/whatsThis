@@ -1,4 +1,9 @@
 # whatsThis?
+[![Video Title](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=ZhuA5CM78yw)
+
+
+
+
 WhatsThis?: Instantly understand screen content with AI. Snapshot, analyze, chat - all in one sleek, Linux-friendly app. Explore visuals effortlessly!
 
 
