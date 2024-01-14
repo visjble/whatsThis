@@ -1,4 +1,4 @@
-import os
+import os, time
 import subprocess
 import openai
 import base64
@@ -9,6 +9,13 @@ api_key = ""                 # Stores the API key for authentication
 base64_image = ""            # Stores the base64 encoded image
 conversation_id = None       # Stores the conversation ID for the API session
 first_api_call = True        # Flag to track if it's the first call to the API
+
+#typewriter effect
+def typewrite(text, delay=0.01):
+    for char in text:
+        print(char, end='', flush=True)
+        time.sleep(delay)
+    print()  # for newline after the text
 
 # Function to take a screenshot and save it to a temporary file
 def take_screenshot():
@@ -25,7 +32,7 @@ def encode_image(image_path):
 def upload_image_and_get_description(base64_image, additional_text="What’s in this image? Be concise and to the point"):
     global conversation_id, first_api_call
     if first_api_call:
-        print('Querying gpt4-vision...')
+        typewrite('Querying gpt4-vision...')
         first_api_call = False  # Set the flag to False after the first call
 
     # Headers for the API request
@@ -91,17 +98,17 @@ def main():
         while True:
             additional_text = "What’s in this image? Be concise and to the point"
             description = upload_image_and_get_description(base64_image, additional_text)
-            print("\nAI Response::\n" + description)
+            typewrite("\nAI Response::\n" + description)
             
             # Input prompt for continuation or termination of the conversation
             user_input = input("\nYou:: ").strip().lower()
             if user_input == 'q':
-                print('BYENOW')
+                typewrite('BYENOW')
                 break
 
     # Handling the KeyboardInterrupt exception
     except KeyboardInterrupt:
-        print('\nBYENOW')
+        typewrite('\nBYENOW')
 
 # Entry point of the script
 if __name__ == "__main__":
