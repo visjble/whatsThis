@@ -84,32 +84,30 @@ def upload_image_and_get_description(base64_image, additional_text="What’s in 
 # Main function of the script
 def main():
     global api_key, base64_image
-    
-    # Try-except block to handle KeyboardInterrupt
+
     try:
-        with open("/path/to/your/api_key.txt", "r") as file: #EDIT HERE
+        with open("/home/q/Documents/PythonProjects/chat/kk.txt", "r") as file:
             api_key = file.read().strip()
 
-        # Taking a screenshot and encoding it
         screenshot_file = take_screenshot()
         base64_image = encode_image(screenshot_file)
 
-        # Main loop to interact with the user
+        # Initial query related to the image
+        initial_text = "What’s in this image? Be concise and to the point"
+        initial_description = upload_image_and_get_description(base64_image, initial_text)
+        typewrite("\nAI Response::\n" + initial_description)
+
         while True:
-            additional_text = "What’s in this image? Be concise and to the point"
-            description = upload_image_and_get_description(base64_image, additional_text)
-            typewrite("\nAI Response::\n" + description)
-            
-            # Input prompt for continuation or termination of the conversation
+            # Additional questions or user input
             user_input = input("\nYou:: ").strip().lower()
+
             if user_input == 'q':
-                typewrite('BYENOW')
+                typewrite('\nBYENOW')
                 break
 
-    # Handling the KeyboardInterrupt exception
-    except KeyboardInterrupt:
-        typewrite('\nBYENOW')
+            # Send the user's input as additional text for the conversation
+            description = upload_image_and_get_description(base64_image, user_input)
+            typewrite("\nAI Response::\n" + description)
 
-# Entry point of the script
-if __name__ == "__main__":
-    main()
+    except KeyboardInterrupt:
+        typewrite('\n\nBYENOW')
