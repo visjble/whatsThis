@@ -86,7 +86,7 @@ def main():
     global api_key, base64_image
 
     try:
-        with open("/home/q/Documents/PythonProjects/chat/kk.txt", "r") as file:
+        with open("/path/to/api_key.txt", "r") as file: #EDIT HERE
             api_key = file.read().strip()
 
         screenshot_file = take_screenshot()
