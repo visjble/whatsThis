@@ -86,7 +86,7 @@ def main():
     global api_key, base64_image
 
     try:
-        with open("/path/to/api_key.txt", "r") as file: #EDIT HERE
+        with open("/home/q/Documents/PythonProjects/chat/kk.txt", "r") as file:
             api_key = file.read().strip()
 
         screenshot_file = take_screenshot()
@@ -101,7 +101,7 @@ def main():
             # Additional questions or user input
             user_input = input("\nYou:: ").strip().lower()
 
-            if user_input == 'q':
+            if user_input in ['q', 'quit', 'exit']:
                 typewrite('\nBYENOW')
                 break
 
@@ -109,5 +109,15 @@ def main():
             description = upload_image_and_get_description(base64_image, user_input)
             typewrite("\nAI Response::\n" + description)
 
+            # Prompt to ask if the user wants to continue
+            continue_prompt = input("\nDo you want to continue? (yes/no): ").strip().lower()
+            if continue_prompt in ['no', 'n', 'quit', 'exit']:
+                typewrite('\nBYENOW')
+                break
+
     except KeyboardInterrupt:
         typewrite('\n\nBYENOW')
+
+
+if __name__ == "__main__":
+    main()
