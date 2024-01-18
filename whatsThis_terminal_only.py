@@ -98,22 +98,28 @@ def main():
         typewrite("\nAI Response::\n" + initial_description)
 
         while True:
-            # Additional questions or user input
-            user_input = input("\nYou:: ").strip().lower()
+        # Additional questions or user input
+	        user_input = input("\nYou:: ").strip().lower()
 
-            if user_input in ['q', 'quit', 'exit']:
-                typewrite('\nBYENOW')
-                break
+	        if user_input in ['q', 'quit', 'exit']:
+	            typewrite('\nBYENOW')
+	            break
+	        elif user_input in ['s']:
+	            # Prompt to confirm screenshot retake
+	            confirm_screenshot = input("\nDo you want to take a new screenshot? (yes/no): ").strip().lower()
+	            if confirm_screenshot in ['yes', 'y']:
+	                # Take a new screenshot and update the base64_image
+	                screenshot_file = take_screenshot()
+	                base64_image = encode_image(screenshot_file)
+	                typewrite("\nScreenshot retaken successfully!")
+	        elif user_input in ['c']:  # Add an option for clearing the screen
+	            # Clear the screen (implementation depends on your system)
+	            system("clear")  # Example for Unix-based systems
+	        else:
+	            # Send the user's input as additional text for the conversation
+	            description = upload_image_and_get_description(base64_image, user_input)
+	            typewrite("\nAI Response::\n" + description)
 
-            # Send the user's input as additional text for the conversation
-            description = upload_image_and_get_description(base64_image, user_input)
-            typewrite("\nAI Response::\n" + description)
-
-            # Prompt to ask if the user wants to continue
-            continue_prompt = input("\nDo you want to continue? (yes/no): ").strip().lower()
-            if continue_prompt in ['no', 'n', 'quit', 'exit']:
-                typewrite('\nBYENOW')
-                break
 
     except KeyboardInterrupt:
         typewrite('\n\nBYENOW')
