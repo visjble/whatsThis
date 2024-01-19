@@ -129,7 +129,7 @@ def main():
 
 
     except KeyboardInterrupt:
-        print('-------\n\nBYENOW')
+        print('\n\nBYENOW')
 
 
 if __name__ == "__main__":
